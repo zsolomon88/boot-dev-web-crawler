@@ -1,0 +1,26 @@
+{
+  "name": "boot-dev-web-crawler",
+  "version": "1.0.0",
+  "description": "boot.dev web crawler project",
+  "main": "main.js",
+  "scripts": {
+    "test": "jest",
+    "start": "node main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zsolomon88/boot-dev-web-crawler.git"
+  },
+  "author": "Zev Solomon",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zsolomon88/boot-dev-web-crawler/issues"
+  },
+  "homepage": "https://github.com/zsolomon88/boot-dev-web-crawler#readme",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "dependencies": {
+    "jsdom": "^24.0.0"
+  }
+}
