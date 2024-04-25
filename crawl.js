@@ -31,7 +31,26 @@ function getURLsFromHTML(htmlBody, baseURL) {
   return linksList;
 }
 
+async function crawlPage(baseUrl) {
+  try {
+    const response = await fetch(baseUrl, {
+      method: "GET",
+    });
+    if (!response.ok) {
+      throw new Error(`Unable to fetch page, HTTP Code: ${response.code}`);
+    }
+    const contentType = response.headers.get("content-type");
+    if (!contentType || !contentType.includes("text/html")) {
+      throw new TypeError(`Expected HTML type, got: ${contentType}`);
+    }
+    console.log(await response.text());
+  } catch (error) {
+    console.error(`Unable to fetch page: ${error.message}`);
+  }
+}
+
 module.exports = {
   normalizeURL,
   getURLsFromHTML,
+  crawlPage,
 };
