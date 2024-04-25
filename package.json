@@ -5,7 +5,8 @@
   "main": "main.js",
   "scripts": {
     "test": "jest",
-    "start": "node main.js"
+    "start": "node main.js",
+    "blog": "node main.js https://www.wagslane.dev"
   },
   "repository": {
     "type": "git",

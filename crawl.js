@@ -31,8 +31,22 @@ function getURLsFromHTML(htmlBody, baseURL) {
   return linksList;
 }
 
-async function crawlPage(baseUrl) {
+async function crawlPage(baseUrl, currentUrl, pages) {
+  let htmlText = "";
   try {
+    const base = new URL(baseUrl);
+    const current = new URL(currentUrl);
+    const normalized = normalizeURL(currentUrl);
+    if (base.hostname != current.hostname) {
+      return pages;
+    }
+    if (pages[normalized] > 0) {
+      pages[normalized]++;
+      return pages;
+    } else {
+      pages[normalized] = 1;
+    }
+
     const response = await fetch(baseUrl, {
       method: "GET",
     });
@@ -43,14 +57,36 @@ async function crawlPage(baseUrl) {
     if (!contentType || !contentType.includes("text/html")) {
       throw new TypeError(`Expected HTML type, got: ${contentType}`);
     }
-    console.log(await response.text());
+    htmlText = await response.text();
   } catch (error) {
     console.error(`Unable to fetch page: ${error.message}`);
   }
+  const urlsList = getURLsFromHTML(htmlText, baseUrl);
+  for (let url of urlsList) {
+    pages = await crawlPage(baseUrl, url, pages);
+  }
+  return pages;
+}
+
+function printReport(pages) {
+  console.log("-- Starting Crawl Report --");
+  const sortedPages = sortReport(pages);
+  for (const page of sortedPages) {
+    console.log(`Found ${page[1]} internal links to ${page[0]}`);
+  }
+}
+
+function sortReport(pages) {
+  const pagesArr = Object.entries(pages);
+  pagesArr.sort((pageA, pageB) => {
+    return pageB[1] - pageA[1];
+  });
+  return pagesArr;
 }
 
 module.exports = {
   normalizeURL,
   getURLsFromHTML,
   crawlPage,
+  printReport,
 };

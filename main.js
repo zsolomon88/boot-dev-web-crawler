@@ -1,4 +1,4 @@
-const { crawlPage } = require("./crawl");
+const { crawlPage, printReport } = require("./crawl");
 
 async function main() {
   console.log(process.argv.length);
@@ -9,7 +9,8 @@ async function main() {
 
   const baseURL = process.argv[2];
   try {
-    await crawlPage(baseURL);
+    const pages = await crawlPage(baseURL, baseURL, {});
+    printReport(pages);
   } catch (error) {
     console.error(`Unable to crawl: ${error.message}`);
   }
